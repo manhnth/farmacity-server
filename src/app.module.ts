@@ -20,7 +20,7 @@ import { RedisModule } from '@nestjs-modules/ioredis';
       // transport: 'smtps://ntmanhvp2k@gmail.com:themanh2k@smtp.gmail.com',
       transport: {
         host: 'smtp.gmail.com',
-        port: 456,
+        port: 465,
         auth: {
           user: 'ntmanhvp2k@gmail.com',
           pass: 'wkyzuybarlayrazi',

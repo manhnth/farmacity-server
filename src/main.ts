@@ -14,8 +14,9 @@ async function bootstrap() {
   app.use(cookieParser());
   app.enableCors({
     origin: [
-      '*',
-      // 'http://localhost:3000'
+      'http://localhost:3000',
+      'http://farmacity.vercel.app',
+      'https://farmacity.vercel.app/',
     ],
     credentials: true,
   });

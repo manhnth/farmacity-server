@@ -32,7 +32,6 @@ export class ProductsController {
   async findProduct(@Query() query: any) {
     const { category, sort, q } = query;
     const builder = await this.productService.queryBuilder('product');
-    console.log('cate', category);
 
     if (category) {
       builder.where('product.category=:c', { c: category });

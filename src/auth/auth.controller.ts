@@ -9,6 +9,7 @@ import {
   Res,
   Req,
   BadRequestException,
+  NotFoundException,
 } from '@nestjs/common';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
@@ -16,6 +17,9 @@ import { AuthService } from './auth.service';
 import { Request, Response } from 'express';
 import { MailerService } from '@nestjs-modules/mailer';
 import { v4 } from 'uuid';
+import { InjectRedis, Redis } from '@nestjs-modules/ioredis';
+import { ChangePasswordDto } from './dto/change-password.dto';
+import * as bcrypt from 'bcrypt';
 
 @Controller('auth')
 export class AuthController {
@@ -23,6 +27,7 @@ export class AuthController {
     private readonly userService: UsersService,
     private authService: AuthService,
     private readonly mailerService: MailerService,
+    @InjectRedis() private readonly redis: Redis,
   ) {}
 
   @UseGuards(LocalAuthGuard)
@@ -85,9 +90,10 @@ export class AuthController {
     res.send({ message: 'logged out!' });
   }
 
-  @Post('resetPassword')
+  @Post('forgotPassword')
   async resetPassword(@Body() userEmail: any) {
-    const { email } = userEmail;
+    const email = userEmail.email;
+
     const user = await this.userService.findOne(email);
 
     if (!user) {
@@ -95,13 +101,22 @@ export class AuthController {
     }
 
     const resetToken = v4();
+
+    await this.redis.set(
+      'RESETPASSWORD' + resetToken,
+      user.id,
+      'EX',
+      1000 * 60 * 60 * 24, // 1 day
+    );
+
     const res = await this.mailerService
       .sendMail({
-        to: email, // list of receivers
+        to: 'ntmanh2903@gmail.com', // list of receivers
         from: 'ntmanhvp2k@gmail.com', // sender address
-        subject: 'Testing Nest MailerModule ✔', // Subject line
-        text: 'welcome', // plaintext body
-        html: '<b>welcome</b>', // HTML body content
+        subject: 'Farmacity reset password ✔', // Subject line
+        // text: 'reset password',
+        // plaintext body
+        html: `<a href='http://localhost:3000/changePassword/${resetToken}'>reset password</a>`, // HTML body content
       })
       .then(() => {
         console.log('ok');
@@ -110,6 +125,35 @@ export class AuthController {
         console.log(e);
       });
     return res;
+  }
+
+  @Post('changePassword')
+  async changePassword(@Body() changePasswordDto: ChangePasswordDto) {
+    const { token, newPassword } = changePasswordDto;
+
+    const userId = await this.redis.get('RESETPASSWORD' + token);
+
+    if (!userId) {
+      throw new BadRequestException(`reset token expired!`);
+    }
+
+    const user = await this.userService.getUserById(+userId);
+
+    if (!user) {
+      throw new NotFoundException(`Not found user in db!`);
+    }
+
+    // hash password
+    const salt = await bcrypt.genSalt();
+    const hashedPassword = await bcrypt.hash(
+      changePasswordDto.newPassword,
+      salt,
+    );
+
+    return await this.userService.updateUser(
+      { password: hashedPassword },
+      user,
+    );
   }
 
   @UseGuards(JwtAuthGuard)

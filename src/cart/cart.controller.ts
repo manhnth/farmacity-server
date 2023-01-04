@@ -64,7 +64,6 @@ export class CartController {
     if (!product) {
       throw new NotFoundException(`Not found product with id: ${productId}`);
     }
-    console.log('product', product, 'product id', productId);
 
     const cart = await this.cartService.getCartByUserId(userId);
 

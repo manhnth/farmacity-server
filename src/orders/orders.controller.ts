@@ -63,6 +63,5 @@ export class OrdersController {
   @Patch(':id')
   async confirmStatus(@Param('id') id: number) {
     const res = await this.ordersService.confirmStatus(id);
-    console.log(res);
   }
 }

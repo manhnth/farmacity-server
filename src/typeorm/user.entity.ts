@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { Order } from './order.entity';
 
-enum UserRole {
+export enum UserRole {
   CUSTOMER = 'customer',
   ADMIN = 'admin',
 }

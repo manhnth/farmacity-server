@@ -13,11 +13,14 @@ async function bootstrap() {
   );
   app.use(cookieParser());
   app.enableCors({
-    origin: [
-      'http://localhost:3000',
-      'http://farmacity.vercel.app',
-      'https://farmacity.vercel.app',
-    ],
+    origin: true,
+    //  [
+    //   // '*',
+    //   // 'http://localhost:3000',
+    //   // 'http://farmacity.vercel.app',
+    //   // 'https://farmacity.vercel.app',
+    // ],
+
     allowedHeaders:
       'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
     methods: 'GET,PUT,POST,DELETE,UPDATE,OPTIONS, PATCH',

@@ -42,7 +42,7 @@ async function bootstrap() {
     ],
 
     allowedHeaders:
-      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe, Access-Control-Allow-Headers, authorization',
+      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe, Access-Control-Allow-Headers, authorization, ‘Access-Control-Allow-Origin',
     methods: 'GET,PUT,PATCH,POST,DELETE,UPDATE,OPTIONS',
     credentials: true,
   });

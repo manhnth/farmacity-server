@@ -12,18 +12,38 @@ async function bootstrap() {
     // }
   );
   app.use(cookieParser());
+
+  // app.use((req, res, next) => {
+  //   res.header('Access-Control-Allow-Origin', '*');
+  //   res.header(
+  //     'Access-Control-Allow-Methods',
+  //     'GET,PUT,POST,DELETE, PATCH, OPTIONS',
+  //   );
+  //   res.header(
+  //     'Access-Control-Allow-Headers',
+  //     'Content-Type, Accept',
+  //     'authorization',
+  //   );
+  //   res.header('Access-Control-Allow-Credentials', true);
+  //   next();
+  // });
+
+  // app.enableCors({
+  //   allowedHeaders: '*',
+  //   origin: '*',
+  //   credentials: true,
+  // });
+
   app.enableCors({
-    origin: true,
-    //  [
-    //   // '*',
-    //   // 'http://localhost:3000',
-    //   // 'http://farmacity.vercel.app',
-    //   // 'https://farmacity.vercel.app',
-    // ],
+    origin: [
+      'http://localhost:3000',
+      'http://farmacity.vercel.app',
+      'https://farmacity.vercel.app',
+    ],
 
     allowedHeaders:
-      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe',
-    methods: 'GET,PUT,POST,DELETE,UPDATE,OPTIONS, PATCH',
+      'X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept, Observe, Access-Control-Allow-Headers, authorization',
+    methods: 'GET,PUT,PATCH,POST,DELETE,UPDATE,OPTIONS',
     credentials: true,
   });
 

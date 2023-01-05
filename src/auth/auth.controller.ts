@@ -79,6 +79,8 @@ export class AuthController {
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       httpOnly: true,
       domain: 'vercel.app',
+      sameSite: 'none',
+      secure: true,
     });
     return res.send({ access_token });
   }

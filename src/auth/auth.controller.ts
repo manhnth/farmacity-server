@@ -20,7 +20,9 @@ import { v4 } from 'uuid';
 import { InjectRedis, Redis } from '@nestjs-modules/ioredis';
 import { ChangePasswordDto } from './dto/change-password.dto';
 import * as bcrypt from 'bcrypt';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(

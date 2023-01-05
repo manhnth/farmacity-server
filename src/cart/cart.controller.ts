@@ -17,8 +17,11 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 
 @UseGuards(JwtAuthGuard)
+@ApiBearerAuth()
+@ApiTags('cart')
 @Controller('cart')
 export class CartController {
   constructor(

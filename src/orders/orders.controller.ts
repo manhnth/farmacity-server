@@ -1,3 +1,4 @@
+import { ApiTags } from '@nestjs/swagger';
 import { CartService } from './../cart/cart.service';
 import { CreateOrderItemsDto } from './dto/create-order-items.dto';
 import { UsersService } from './../users/users.service';
@@ -19,6 +20,7 @@ import {
 } from '@nestjs/common';
 
 @UseGuards(JwtAuthGuard)
+@ApiTags('orders')
 @Controller('orders')
 export class OrdersController {
   constructor(
